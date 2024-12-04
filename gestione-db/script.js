@@ -143,7 +143,7 @@ fetch(`https://notizie.terribile.space/api/notizie/${id}`, { method: 'DELETE' })
 async function inserisciNotizia(indice) {
 
   const titolo = document.getElementById(indice + "-titolo").value;
-  const contenuto = document.getElementById(indice + "-contenuto").value;
+  var contenuto = document.getElementById(indice + "-contenuto").value;
   const immagine = document.getElementById(indice + "-immagine").value;
   const video = document.getElementById(indice + "-video").value;
   const doc_id = indice;
