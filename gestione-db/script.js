@@ -148,7 +148,7 @@ async function inserisciNotizia(indice) {
   const video = document.getElementById(indice + "-video").value;
   const doc_id = indice;
 
-  contenuto = contenuto.replaceAll("\'", "\\\'").replaceAll('\"','\\\"');
+  contenuto = JSON.stringify(contenuto);
 
   fetch('https://notizie.terribile.space/api/notizie', {
     method: 'POST',
