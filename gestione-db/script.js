@@ -1,6 +1,6 @@
 var indice = 0;
 function caricaNotizie() {
-fetch('http://127.0.0.1:8081/api/notizie')
+fetch('https://notizie.terribile.space/api/notizie')
   .then(response => response.json())
   .then(notizie => {
     const tabella = document.getElementById('notizie-table').getElementsByTagName('tbody')[0];
@@ -130,7 +130,7 @@ async function modificaNotizia(notizia) {
 }
 
 async function eliminaNotizia(id) {
-fetch(`http://127.0.0.1:8081/api/notizie/${id}`, { method: 'DELETE' })
+fetch(`https://notizie.terribile.space/api/notizie/${id}`, { method: 'DELETE' })
   .then(response => {
     if (response.ok) {
         window.location = window.location;
@@ -148,7 +148,7 @@ async function inserisciNotizia(indice) {
   const video = document.getElementById(indice + "-video").value;
   const doc_id = indice;
 
-  fetch('http://127.0.0.1:8081/api/notizie', {
+  fetch('https://notizie.terribile.space/api/notizie', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -185,7 +185,7 @@ function creaContenuto(htmlid) {
   console.log(htmlid);
   var text = document.getElementById(htmlid).value;
   console.log(text);
-  
+
   // Crea l'editor TinyMCE
   popup.innerHTML = `
     <textarea id="editor">`+text+`</textarea>

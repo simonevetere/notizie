@@ -25,7 +25,7 @@ function visualizzaNotiziaCompleta(notizia) {
 }
 
 function caricaNotizie() {
-  fetch('http://127.0.0.1:8081/api/notizie')
+  fetch('https://notizie.terribile.space/api/notizie')
     .then(response => response.json())
     .then(notizie => {
 

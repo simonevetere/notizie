@@ -65,4 +65,4 @@ def eliminare_notizia(id):
         return jsonify({'messaggio': 'Notizia non trovata'}), 404
 
 if __name__ == '__main__':
-    app.run(port=8081)
+    app.run(port=8600)
