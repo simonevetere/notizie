@@ -40,8 +40,9 @@ main {
 
 article {
   margin-bottom: 20px;
-  border-bottom: 1px solid #fff;
-  padding-bottom: 20px;
+  padding: 20px 100px;
+  justify-content: center;
+  align-items: center;
 }
 
 article h2 {  
@@ -86,11 +87,12 @@ footer a {
     display: block; 
     margin: 10px 0; 
   }
-
+  
   article {
     margin-bottom: 20px;
-    border-bottom: 1px solid #fff;
-    padding-bottom: 20px;
+    padding: 20px 10px;
+    justify-content: center;
+    align-items: center;
   }
 
   article h2 {  

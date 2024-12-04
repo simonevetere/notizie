@@ -148,11 +148,14 @@ async function inserisciNotizia(indice) {
   const video = document.getElementById(indice + "-video").value;
   const doc_id = indice;
 
+  const contenuto = contenuto.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"');
+
   fetch('https://notizie.terribile.space/api/notizie', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
+
     body: JSON.stringify({ titolo, contenuto, immagine, video }),
   })
   .then(response => response.json())
@@ -189,7 +192,7 @@ function creaContenuto(htmlid) {
   // Crea l'editor TinyMCE
   popup.innerHTML = `
     <textarea id="editor">`+text+`</textarea>
-    <button onclick="salvaContenuto(`+htmlid+`)">Salva</button>
+    <button onclick="salvaContenuto('`+htmlid+`')">Salva</button>
     <button onclick="chiudiPopup()">Annulla</button>
   `;
 
