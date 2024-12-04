@@ -18,7 +18,7 @@ function visualizzaNotiziaCompleta(notizia) {
   article.innerHTML = `
     <h2>${notizia.titolo}</h2>
     ${notizia.immagine ? `<img src="${notizia.immagine}" alt="${notizia.titolo}">` : ''}
-    ${notizia.contenuto.replace("\\", " ")}
+    ${notizia.contenuto.replaceAll("\\", " ")}
     ${notizia.video ? `<video width="640" height="360" controls><source src="${notizia.video}" type="video/mp4">Il tuo browser non supporta il tag video.</video>` : ''}
   `;
   document.querySelector('main').appendChild(article);
