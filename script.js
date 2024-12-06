@@ -43,6 +43,30 @@ function visualizzaNotiziaCompleta(notizia) {
     }
   }
 
+  // Aggiungi i meta tag Open Graph
+  var head = document.getElementsByTagName('head')[0];
+
+  if (notizia.video) {
+    // Se è un video, usa i meta tag per i video
+    head.innerHTML += `
+      <meta property="og:title" content="${notizia.titolo}" />
+      <meta property="og:description" content="${notizia.contenuto.substring(0, 100)}..." />
+      <meta property="og:type" content="video.other" />
+      <meta property="og:video" content="${notizia.video}" />
+      <meta property="og:video:secure_url" content="${notizia.video}" />
+      <meta property="og:video:type" content="application/x-shockwave-flash" /> 
+      <meta property="og:url" content="${window.location.href}" />
+    `;
+  } else {
+    // Se non è un video, usa i meta tag standard
+    head.innerHTML += `
+      <meta property="og:title" content="${notizia.titolo}" />
+      <meta property="og:description" content="${notizia.contenuto.substring(0, 100)}..." />
+      <meta property="og:image" content="${notizia.immagine}" />
+      <meta property="og:url" content="${window.location.href}" />
+    `;
+  }
+  
   document.querySelector('main').appendChild(article);
 }
 
