@@ -39,6 +39,7 @@ def restore_database():
 @app.errorhandler(Exception)
 def handle_error(e):
     """Gestisce tutti gli errori, ripristina il database in caso di errore 500."""
+    print(e)
     if getattr(e, 'code', None) == 500:
         restore_database()
         return jsonify({'messaggio': 'Errore interno del server. Database ripristinato.'}), 500
@@ -75,8 +76,9 @@ def ottenere_notizia(id):
         id = int(id)
         notizia = db.get(doc_id=id)
     except ValueError:
+        n = Query()
         # Se la conversione fallisce, cerca con id=
-        notizia = db.get(id=id)
+        notizia = db.search(n.id.matches(id))
     except Exception as e:
         return handle_error(e)
 

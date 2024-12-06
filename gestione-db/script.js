@@ -13,7 +13,7 @@ fetch('https://meme.terribile.space/api/notizie')
       const inputId = document.createElement('input');
       inputId.type = 'text';
       inputId.id = notizia.doc_id + '-id';
-      inputId.value = notizia.titolo;
+      inputId.value = notizia.id;
       cellaId.appendChild(inputId);
 
       // Titolo

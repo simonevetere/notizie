@@ -18,7 +18,7 @@ function creaAnteprimaNotizia(notizia) {
 
   // Aggiungi l'onclick all'article
   article.onclick = () => {
-    window.location.href = `?id=${notizia.doc_id}`; 
+    window.location.href = `?id=${notizia.id}`; 
   };
 
   return article;
@@ -55,10 +55,7 @@ function caricaNotizie() {
       const id = urlParams.get('id');
       const category = urlParams.get('catergory');
       if (id) {
-        const notizia = notizie.find(n => n.doc_id === parseInt(id));
-        if (notizia) {
-          visualizzaNotiziaCompleta(notizia);
-        }
+        caricaNotizieId(id);
       } else if (category) { 
         const categorieValide = ['random', 'geopolitics', 'niggameme', 'chiggameme', 'italy'];
         if (categorieValide.includes(category)) {
@@ -80,6 +77,14 @@ function caricaNotizie() {
         });
       }
 
+    });
+}
+
+function caricaNotizieId(id) {
+  fetch('https://meme.terribile.space/api/notizie/'+ id)
+    .then(response => response.json())
+    .then(notizia => {
+      visualizzaNotiziaCompleta(notizia[0]);
     });
 }
 
