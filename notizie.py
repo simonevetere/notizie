@@ -1,3 +1,5 @@
+import os
+import shutil
 from flask import Flask, request, jsonify
 from tinydb import TinyDB, Query
 from flask_cors import CORS
@@ -13,29 +15,71 @@ class NotiziaSchema(Schema):
     contenuto = fields.Str(required=True)
     immagine = fields.Str(required=False)
     video = fields.Str(required=False)
+    id = fields.Str(required=True)
+    categoria = fields.Str(required=True)
 
 notizia_schema = NotiziaSchema()
 
-@app.errorhandler(400)
-def bad_request(error):
-    return jsonify({'messaggio': 'Richiesta non valida', 'errore': str(error)}), 400
+def backup_database():
+    """Crea un backup di notizie.json."""
+    try:
+        shutil.copy('notizie.json', 'notizie.json.bak')
+        print("Backup del database creato con successo.")
+    except Exception as e:
+        print(f"Errore durante la creazione del backup: {e}")
+
+def restore_database():
+    """Ripristina il backup di notizie.json."""
+    try:
+        shutil.copy('notizie.json.bak', 'notizie.json')
+        print("Database ripristinato dal backup.")
+    except Exception as e:
+        print(f"Errore durante il ripristino del backup: {e}")
+
+@app.errorhandler(Exception)
+def handle_error(e):
+    """Gestisce tutti gli errori, ripristina il database in caso di errore 500."""
+    if getattr(e, 'code', None) == 500:
+        restore_database()
+        return jsonify({'messaggio': 'Errore interno del server. Database ripristinato.'}), 500
+    else:
+        # Cancella il backup se non c'è stato un errore 500
+        try:
+            os.remove('notizie.json.bak')
+        except FileNotFoundError:
+            pass  # Il file non esiste, niente da fare
+        return jsonify({'messaggio': 'Errore generico'}), getattr(e, 'code', 500)
 
 @app.route('/api/notizie', methods=['GET'])
 def ottenere_notizie():
     """
     Restituisce tutte le notizie nel database.
     """
-    notizie = db.all()
-    for notizia in notizie:
-        notizia['doc_id'] = notizia.doc_id  # Aggiungi il doc_id al dizionario
-    return jsonify(notizie)
+    backup_database()
+    try:
+        notizie = db.all()
+        for notizia in notizie:
+            notizia['doc_id'] = notizia.doc_id  # Aggiungi il doc_id al dizionario
+        return jsonify(notizie)
+    except Exception as e:
+        return handle_error(e)
 
-@app.route('/api/notizie/<int:id>', methods=['GET'])
+@app.route('/api/notizie/<id>', methods=['GET'])
 def ottenere_notizia(id):
     """
     Restituisce una singola notizia in base all'ID.
     """
-    notizia = db.get(doc_id=id)
+    backup_database()
+    try:
+        # Tenta di convertire l'ID in un intero
+        id = int(id)
+        notizia = db.get(doc_id=id)
+    except ValueError:
+        # Se la conversione fallisce, cerca con id=
+        notizia = db.get(id=id)
+    except Exception as e:
+        return handle_error(e)
+
     if notizia:
         return jsonify(notizia)
     else:
@@ -46,23 +90,29 @@ def creare_notizia():
     """
     Inserisce una nuova notizia nel database.
     """
+    backup_database()
     try:
         notizia = notizia_schema.load(request.get_json())
-        print(notizia_schema.load(request.get_json()))
         db.insert(notizia)
         return jsonify(notizia), 201
     except ValidationError as err:
         return jsonify({'messaggio': 'Dati non validi', 'errori': err.messages}), 400
+    except Exception as e:
+        return handle_error(e)
 
 @app.route('/api/notizie/<int:id>', methods=['DELETE'])
 def eliminare_notizia(id):
     """
     Elimina una notizia in base all'ID.
     """
-    if db.remove(doc_ids=[id]):
-        return jsonify({'messaggio': 'Notizia eliminata'}), 200
-    else:
-        return jsonify({'messaggio': 'Notizia non trovata'}), 404
+    backup_database()
+    try:
+        if db.remove(doc_ids=[id]):
+            return jsonify({'messaggio': 'Notizia eliminata'}), 200
+        else:
+            return jsonify({'messaggio': 'Notizia non trovata'}), 404
+    except Exception as e:
+        return handle_error(e)
 
 if __name__ == '__main__':
     app.run(port=8600)

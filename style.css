@@ -64,6 +64,12 @@ article video {
   max-width: 100%;
 }
 
+article iframe {
+  display: block;
+  margin: 10px auto; 
+  max-width: 100%;
+}
+
 footer {
   text-align: center;
   position: fixed;
@@ -83,10 +89,6 @@ footer a {
 
 
 @media (max-width: 1000px) { 
-  nav li {
-    display: block; 
-    margin: 10px 0; 
-  }
   
   article {
     margin-bottom: 20px;
@@ -101,7 +103,7 @@ footer a {
     text-align: center; 
   }
 
-  article img, article video {
+  article img, article video, article iframe {
     max-width: 100%;
     height: auto;
   }

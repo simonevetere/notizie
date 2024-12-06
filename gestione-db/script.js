@@ -8,6 +8,14 @@ fetch('https://meme.terribile.space/api/notizie')
     notizie.forEach(notizia => {
       const riga = tabella.insertRow();
 
+      // id
+      const cellaId = riga.insertCell();
+      const inputId = document.createElement('input');
+      inputId.type = 'text';
+      inputId.id = notizia.doc_id + '-id';
+      inputId.value = notizia.titolo;
+      cellaId.appendChild(inputId);
+
       // Titolo
       const cellaTitolo = riga.insertCell();
       const inputTitolo = document.createElement('input');
@@ -56,6 +64,28 @@ fetch('https://meme.terribile.space/api/notizie')
       buttonImmagine.onclick = () => window.open(notizia.immagine, '_blank');
       cellaImmagini.appendChild(buttonImmagine);
 
+      // Categoria
+      const cellaCategoria = riga.insertCell();
+      const selectCategoria = document.createElement('select');
+      selectCategoria.id = notizia.doc_id + '-categoria';
+
+      // Add options to the select element
+      var categorie = ['random', 'geopolitics', 'niggameme', 'chiggameme', 'italy'];
+      categorie.forEach(categoria => {
+        const option = document.createElement('option');
+        option.value = categoria;
+        option.text = categoria;
+        selectCategoria.appendChild(option);
+      });
+
+      // Set the selected option based on notizia.categoria (if available)
+      if (notizia.categoria) {
+        selectCategoria.value = notizia.categoria;
+      }
+
+      cellaCategoria.appendChild(selectCategoria);
+
+
       // Azioni
       const cellaAzioni = riga.insertCell();
       const buttonModifica = document.createElement('button');
@@ -75,6 +105,15 @@ fetch('https://meme.terribile.space/api/notizie')
     const riga = tabella.insertRow();
 
     indice++;
+
+    // id
+    const cellaId = riga.insertCell();
+    const inputId = document.createElement('input');
+    inputId.type = 'text';
+    inputId.id = indice + '-id';
+    inputId.value = generaIdConTimestamp();
+    cellaId.appendChild(inputId);
+
 
     // Titolo
     const cellaTitolo = riga.insertCell();
@@ -115,6 +154,22 @@ fetch('https://meme.terribile.space/api/notizie')
     inputImmagine.value = "";
     cellaImmagini.appendChild(inputImmagine);
 
+    // Categoria
+    const cellaCategoria = riga.insertCell();
+    const selectCategoria = document.createElement('select');
+    selectCategoria.id = indice + '-categoria';
+    
+    // Add options to the select element
+    var categorie = ['random', 'geopolitics', 'niggameme', 'chiggameme', 'italy'];
+    categorie.forEach(categoria => {
+      const option = document.createElement('option');
+      option.value = categoria;
+      option.text = categoria;
+      selectCategoria.appendChild(option);
+    });
+
+    cellaCategoria.appendChild(selectCategoria);
+
     // Azioni
     const cellaAzioni = riga.insertCell();
     const buttonInserisci = document.createElement('button');
@@ -141,12 +196,47 @@ fetch(`https://meme.terribile.space/api/notizie/${id}`, { method: 'DELETE' })
 }
 
 async function inserisciNotizia(indice) {
-
+  
+  var iserror = false;
+  var campo = "";
+  
   const titolo = document.getElementById(indice + "-titolo").value;
   var contenuto = document.getElementById(indice + "-contenuto").value;
   const immagine = document.getElementById(indice + "-immagine").value;
   const video = document.getElementById(indice + "-video").value;
+  const id = document.getElementById(indice + "-id").value;
+  const categoria = document.getElementById(indice + "-categoria").value;
   const doc_id = indice;
+
+  if(titolo == "" || titolo == undefined){
+    iserror = true;
+    campo = campo + ' titolo';
+  }
+
+  if(contenuto == "" || contenuto == undefined){
+    iserror = true;
+    campo = campo + ' contenuto';
+  }
+
+  if((immagine == "" || immagine == undefined) && (video == "" || video == undefined) )  {
+    iserror = true;
+    campo = campo + ' immagine o video';
+  }
+
+  if(id == "" || id == undefined){
+    iserror = true;
+    campo = campo + ' id';
+  }
+
+  if(categoria == "" || categoria == undefined){
+    iserror = true;
+    campo = campo + ' categoria';
+  }
+
+  if(iserror){
+    alert('dio porco campi ' + campo + ' vuoti');
+    return true;
+  }
 
   contenuto = JSON.stringify(contenuto);
 
@@ -156,7 +246,7 @@ async function inserisciNotizia(indice) {
       'Content-Type': 'application/json',
     },
 
-    body: JSON.stringify({ titolo, contenuto, immagine, video }),
+    body: JSON.stringify({ titolo, contenuto, immagine, video, id, categoria }),
   })
   .then(response => response.json())
   .then(data => {
