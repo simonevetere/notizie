@@ -4,7 +4,7 @@ function creaAnteprimaNotizia(notizia) {
     <h2>${notizia.titolo}</h2>
   `;
 
-  if (notizia.immagine) {
+  if (notizia.immagine && !notizia.video) {
     content += `<img src="${notizia.immagine}" alt="${notizia.titolo}">`;
   }
 
@@ -25,11 +25,14 @@ function creaAnteprimaNotizia(notizia) {
 function visualizzaNotiziaCompleta(notizia) {
   var article = document.createElement('article');
   article.innerHTML = `
-        <h2>${notizia.titolo}</h2>
-        ${notizia.immagine ? `<img src="${notizia.immagine}" alt="${notizia.titolo}">` : ''}
-        <p>${notizia.contenuto}</p>
-        ${notizia.video ? `<video controls><source src="${notizia.video}" type="video/mp4">Il tuo browser non supporta il tag video.</video>` : ''}
-      `;
+      <h2>${notizia.titolo}</h2>
+      ${notizia.video ? 
+          `<video controls><source src="${notizia.video}" type="video/mp4">Il tuo browser non supporta il tag video.</video>` 
+          : 
+          (notizia.immagine ? `<img src="${notizia.immagine}" alt="${notizia.titolo}">` : '')
+      }
+      <p>${notizia.contenuto}</p>
+  `;
 
   // Crea il link per la condivisione
   const currentUrl = encodeURIComponent(window.location.href);

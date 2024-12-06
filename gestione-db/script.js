@@ -213,14 +213,9 @@ async function inserisciNotizia(indice) {
     campo = campo + ' titolo';
   }
 
-  if(contenuto == "" || contenuto == undefined){
+  if((immagine == "" || immagine == undefined))  {
     iserror = true;
-    campo = campo + ' contenuto';
-  }
-
-  if((immagine == "" || immagine == undefined) && (video == "" || video == undefined) )  {
-    iserror = true;
-    campo = campo + ' immagine o video';
+    campo = campo + ' immagine';
   }
 
   if(id == "" || id == undefined){
@@ -237,8 +232,6 @@ async function inserisciNotizia(indice) {
     alert('dio porco campi ' + campo + ' vuoti');
     return true;
   }
-
-  contenuto = JSON.stringify(contenuto);
 
   fetch('https://meme.terribile.space/api/notizie', {
     method: 'POST',

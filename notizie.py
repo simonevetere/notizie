@@ -12,7 +12,7 @@ db = TinyDB('notizie.json')
 # Schema per la validazione dei dati
 class NotiziaSchema(Schema):
     titolo = fields.Str(required=True, validate=lambda n: len(n) > 5)
-    contenuto = fields.Str(required=True)
+    contenuto = fields.Str(required=False)
     immagine = fields.Str(required=False)
     video = fields.Str(required=False)
     id = fields.Str(required=True)
