@@ -1,6 +1,6 @@
 var indice = 0;
 function caricaNotizie() {
-fetch('https://notizie.terribile.space/api/notizie')
+fetch('https://meme.terribile.space/api/notizie')
   .then(response => response.json())
   .then(notizie => {
     const tabella = document.getElementById('notizie-table').getElementsByTagName('tbody')[0];
@@ -130,7 +130,7 @@ async function modificaNotizia(notizia) {
 }
 
 async function eliminaNotizia(id) {
-fetch(`https://notizie.terribile.space/api/notizie/${id}`, { method: 'DELETE' })
+fetch(`https://meme.terribile.space/api/notizie/${id}`, { method: 'DELETE' })
   .then(response => {
     if (response.ok) {
         window.location = window.location;
@@ -150,7 +150,7 @@ async function inserisciNotizia(indice) {
 
   contenuto = JSON.stringify(contenuto);
 
-  fetch('https://notizie.terribile.space/api/notizie', {
+  fetch('https://meme.terribile.space/api/notizie', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

@@ -25,7 +25,7 @@ function visualizzaNotiziaCompleta(notizia) {
 }
 
 function caricaNotizie() {
-  fetch('https://notizie.terribile.space/api/notizie')
+  fetch('https://meme.terribile.space/api/notizie')
     .then(response => response.json())
     .then(notizie => {
 
