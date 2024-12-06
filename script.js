@@ -5,13 +5,11 @@ function creaAnteprimaNotizia(notizia) {
   `;
 
   if (notizia.immagine) {
-    if (notizia.immagine.includes('drive.google.com')) {
-      // Use iframe for Google Drive links
-      content += `<iframe src="${notizia.immagine}" allow="autoplay"></iframe>`;
-    } else {
-      // Use img tag for other image links
-      content += `<img src="${notizia.immagine}" alt="${notizia.titolo}">`;
-    }
+    content += `<img src="${notizia.immagine}" alt="${notizia.titolo}">`;
+  }
+
+  if (notizia.video) {
+    content += `<video controls><source src="${notizia.video}" type="video/mp4">Il tuo browser non supporta il tag video.</video>`;
   }
 
   article.innerHTML = content;
@@ -27,21 +25,12 @@ function creaAnteprimaNotizia(notizia) {
 function visualizzaNotiziaCompleta(notizia) {
   var article = document.createElement('article');
   article.innerHTML = `
-    <h2>${notizia.titolo}</h2>
-    ${notizia.contenuto.replaceAll("\\", " ").replaceAll("\"", " ")}
-    ${notizia.video ? `<iframe src="${notizia.video}" allow="autoplay"></iframe>` : ''}
-  `;
+        <h2>${notizia.titolo}</h2>
+        ${notizia.immagine ? `<img src="${notizia.immagine}" alt="${notizia.titolo}">` : ''}
+        <p>${notizia.contenuto}</p>
+        ${notizia.video ? `<video controls><source src="${notizia.video}" type="video/mp4">Il tuo browser non supporta il tag video.</video>` : ''}
+      `;
 
-  
-  if (notizia.immagine) {
-    if (notizia.immagine.includes('drive.google.com')) {
-      // Use iframe for Google Drive links
-      article.innerHTML += `<iframe src="${notizia.immagine}" allow="autoplay"></iframe>`;
-    } else {
-      // Use img tag for other image links
-      article.innerHTML += `<img src="${notizia.immagine}" alt="${notizia.titolo}">`;
-    }
-  } 
   // Crea il link per la condivisione
   const currentUrl = encodeURIComponent(window.location.href);
   const shareLink = `https://meme.terribile.space/preview?titolo=${encodeURIComponent(notizia.titolo)}&contenuto=${encodeURIComponent(notizia.contenuto)}&immagine=${encodeURIComponent(notizia.immagine || '')}&video=${encodeURIComponent(notizia.video || '')}&redirect=${currentUrl}`;
