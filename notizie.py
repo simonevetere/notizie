@@ -40,16 +40,8 @@ def restore_database():
 def handle_error(e):
     """Gestisce tutti gli errori, ripristina il database in caso di errore 500."""
     print(e)
-    if getattr(e, 'code', None) == 500:
-        restore_database()
-        return jsonify({'messaggio': 'Errore interno del server. Database ripristinato.'}), 500
-    else:
-        # Cancella il backup se non c'è stato un errore 500
-        try:
-            os.remove('notizie.json.bak')
-        except FileNotFoundError:
-            pass  # Il file non esiste, niente da fare
-        return jsonify({'messaggio': e}), getattr(e, 'code', 500)
+    restore_database()
+    return jsonify({'messaggio': 'Errore interno del server. Database ripristinato.'}), 500
 
 @app.route('/api/notizie', methods=['GET'])
 def ottenere_notizie():
@@ -142,6 +134,8 @@ def get_preview():
     }
 
     return render_template('preview.html', notizia=notizia)
+
+backup_database()
 
 if __name__ == '__main__':
     app.run(port=8600)
