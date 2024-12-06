@@ -28,7 +28,7 @@ function visualizzaNotiziaCompleta(notizia) {
   var article = document.createElement('article');
   article.innerHTML = `
     <h2>${notizia.titolo}</h2>
-    ${notizia.contenuto.replaceAll("\\", " ")}
+    ${notizia.contenuto.replaceAll("\\", " ").replaceAll("\"", " ")}
     ${notizia.video ? `<iframe src="${notizia.video}" allow="autoplay"></iframe>` : ''}
   `;
 
@@ -41,33 +41,52 @@ function visualizzaNotiziaCompleta(notizia) {
       // Use img tag for other image links
       article.innerHTML += `<img src="${notizia.immagine}" alt="${notizia.titolo}">`;
     }
-  }
+  } 
+  // Crea il link per la condivisione
+  const currentUrl = encodeURIComponent(window.location.href);
+  const shareLink = `https://meme.terribile.space/preview?titolo=${encodeURIComponent(notizia.titolo)}&contenuto=${encodeURIComponent(notizia.contenuto)}&immagine=${encodeURIComponent(notizia.immagine || '')}&video=${encodeURIComponent(notizia.video || '')}&redirect=${currentUrl}`;
 
-  // Aggiungi i meta tag Open Graph
-  var head = document.getElementsByTagName('head')[0];
+  // Crea il bottone di condivisione
+  const shareButton = document.createElement('button');
+  shareButton.textContent = 'share';
+  shareButton.style = 'color:white;background-color:#000;border-radius:5px;margin-left:40%';
+  shareButton.addEventListener('click', () => {
+    // Crea un input con il link cliccabile
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = shareLink;
+    input.readOnly = true;
+    input.style.width = '100%'; // Imposta la larghezza dell'input al 100%
 
-  if (notizia.video) {
-    // Se è un video, usa i meta tag per i video
-    head.innerHTML += `
-      <meta property="og:title" content="${notizia.titolo}" />
-      <meta property="og:description" content="${notizia.contenuto.substring(0, 100)}..." />
-      <meta property="og:type" content="video.other" />
-      <meta property="og:video" content="${notizia.video}" />
-      <meta property="og:video:secure_url" content="${notizia.video}" />
-      <meta property="og:video:type" content="application/x-shockwave-flash" /> 
-      <meta property="og:url" content="${window.location.href}" />
-    `;
-  } else {
-    // Se non è un video, usa i meta tag standard
-    head.innerHTML += `
-      <meta property="og:title" content="${notizia.titolo}" />
-      <meta property="og:description" content="${notizia.contenuto.substring(0, 100)}..." />
-      <meta property="og:image" content="${notizia.immagine}" />
-      <meta property="og:url" content="${window.location.href}" />
-    `;
-  }
-  
+    // Crea un div per contenere l'input e centrarlo
+    const container = document.createElement('div');
+    container.style.display = 'flex';
+    container.style.justifyContent = 'center'; // Centra l'input orizzontalmente
+    container.appendChild(input);
+
+    // Mostra l'input all'utente (es. con un alert o un modal)
+    alert("copiato negli appunti"); 
+
+    // Seleziona il testo nell'input
+    input.select();
+    input.setSelectionRange(0, 99999); // Per supportare anche i dispositivi mobile
+
+    // Copia il link negli appunti (se supportato dal browser)
+    navigator.clipboard.writeText(shareLink)
+      .then(() => {
+        console.log('Link copiato negli appunti!');
+      })
+      .catch(err => {
+        console.error('Errore durante la copia del link: ', err);
+      });
+  });
+
+  // Aggiungi il bottone accanto al titolo
+  const title = article.querySelector('h2');
+  title.insertAdjacentElement('afterend', shareButton);
+
   document.querySelector('main').appendChild(article);
+
 }
 
 function caricaNotizie() {

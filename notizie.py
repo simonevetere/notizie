@@ -1,6 +1,6 @@
 import os
 import shutil
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from tinydb import TinyDB, Query
 from flask_cors import CORS
 from marshmallow import Schema, fields, ValidationError
@@ -49,7 +49,7 @@ def handle_error(e):
             os.remove('notizie.json.bak')
         except FileNotFoundError:
             pass  # Il file non esiste, niente da fare
-        return jsonify({'messaggio': 'Errore generico'}), getattr(e, 'code', 500)
+        return jsonify({'messaggio': e}), getattr(e, 'code', 500)
 
 @app.route('/api/notizie', methods=['GET'])
 def ottenere_notizie():
@@ -115,6 +115,33 @@ def eliminare_notizia(id):
             return jsonify({'messaggio': 'Notizia non trovata'}), 404
     except Exception as e:
         return handle_error(e)
+
+@app.route('/preview')
+def get_preview():
+    """
+    Restituisce l'HTML dinamico per una singola notizia, 
+    leggendo le informazioni dall'URL e includendo i meta tag per la preview.
+    """
+    titolo = request.args.get('titolo')
+    contenuto = request.args.get('contenuto')
+    immagine = request.args.get('immagine')
+    video = request.args.get('video')
+    redirect = request.args.get('redirect')
+
+    # Validazione basilare dei dati
+    if not titolo  or not redirect:
+        return "Errore: titolo e redirect sono obbligatori", 400
+
+    # Crea un dizionario con i dati della notizia
+    notizia = {
+        'titolo': titolo,
+        'contenuto': contenuto,
+        'immagine': immagine,
+        'video': video,
+        'redirect': redirect
+    }
+
+    return render_template('preview.html', notizia=notizia)
 
 if __name__ == '__main__':
     app.run(port=8600)
