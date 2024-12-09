@@ -1,3 +1,8 @@
+function ordinaNotizie(listaNotizie) {
+  // Ordina le notizie per doc_id in ordine decrescente
+  return listaNotizie.sort((a, b) => b.doc_id - a.doc_id);
+}
+
 function creaAnteprimaNotizia(notizia) {
   const article = document.createElement('article');
   let content = `
@@ -107,7 +112,11 @@ function caricaNotizie() {
         }
      } else {
         const main = document.querySelector('main');
-        notizie.forEach(notizia => {
+
+       // Ordina le notizie PRIMA di aggiungerle al DOM
+        const notizieOrdinate = ordinaNotizie(notizie); 
+
+        notizieOrdinate.forEach(notizia => {
           const anteprima = creaAnteprimaNotizia(notizia);
           main.appendChild(anteprima);
         });
