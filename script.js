@@ -36,7 +36,7 @@ function visualizzaNotiziaCompleta(notizia) {
 
   // Crea il link per la condivisione
   const currentUrl = encodeURIComponent(window.location.href);
-  const shareLink = `https://meme.terribile.space/preview?titolo=${encodeURIComponent(notizia.titolo)}&contenuto=${encodeURIComponent(notizia.contenuto)}&immagine=${encodeURIComponent(notizia.immagine || '')}&video=${encodeURIComponent(notizia.video || '')}&redirect=${currentUrl}`;
+  const shareLink = `https://meme.terribile.space/preview?id=${encodeURIComponent(notizia.id)}`;
 
   // Crea il bottone di condivisione
   const shareButton = document.createElement('button');

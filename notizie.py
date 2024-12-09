@@ -114,24 +114,23 @@ def get_preview():
     Restituisce l'HTML dinamico per una singola notizia, 
     leggendo le informazioni dall'URL e includendo i meta tag per la preview.
     """
-    titolo = request.args.get('titolo')
-    contenuto = request.args.get('contenuto')
-    immagine = request.args.get('immagine')
-    video = request.args.get('video')
-    redirect = request.args.get('redirect')
 
-    # Validazione basilare dei dati
-    if not titolo  or not redirect:
+    id_documento = request.args.get('id')
+
+    try:
+        # Ottieni la notizia direttamente con l'ID
+        notizia = db.get(doc_id=int(id_documento))
+    except (ValueError, TypeError, DocumentNotFoundError) as e:
+        # Gestisci gli errori di tipo e di documento non trovato
+        print(f"Errore durante la ricerca della notizia: {e}")
+        return "Errore: Notizia non trovata", 404
+    except Exception as e:
+        print(f"Errore imprevisto: {e}")
+        return handle_error(e)
+
+    # Validazione dei dati (aggiungi controlli per immagine, video e redirect)
+    if not notizia.titolo or not notizia.redirect:
         return "Errore: titolo e redirect sono obbligatori", 400
-
-    # Crea un dizionario con i dati della notizia
-    notizia = {
-        'titolo': titolo,
-        'contenuto': contenuto,
-        'immagine': immagine,
-        'video': video,
-        'redirect': redirect
-    }
 
     return render_template('preview.html', notizia=notizia)
 

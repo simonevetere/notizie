@@ -2,38 +2,18 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large">
-  <link rel="canonical" href="https://terribile.space/">
-  <meta property="og:locale" content="it_IT">
-  <title>{{ notizia.titolo }}</title>
-  <meta property="og:type" content="article">
-  <meta property="og:title" content="{{ notizia.titolo }}">
-  <meta property="og:description" content="MEME">
-  <meta property="og:url" content="https://meme.terribile.space/">
-  <meta property="og:site_name" content="Terribile SPACE">
-  <meta property="og:image" content="{{ notizia.immagine }}">
-  <meta property="og:image:secure_url" content="{{ notizia.immagine }}">
-  <meta property="og:image:width" content="551">
-  <meta property="og:image:height" content="700">
-  <meta property="og:image:alt" content="{{ notizia.titolo }}">
-  <meta property="og:image:type" content="image/png">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="{{ notizia.titolo }}">
-  <meta name="twitter:description" content="MEME">
-  <meta name="twitter:image" content="{{ notizia.titolo }}">
-
-  <!---
-  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ notizia.titolo }}</title>
   <meta property="og:title" content="{{ notizia.titolo }}" />
   <meta property="og:image" content="{{ notizia.immagine }}" />
-  <meta property="og:url" content="{{ request.url }}" />--->
-  <script>
-    window.location.href = "{{ notizia.redirect }}";
-  </script>
+  <meta property="og:url" content="{{ request.url }}" />
+  <meta property="og:description" content="{{ notizia.contenuto[:150] }}..." /> 
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Nome del tuo sito" /> 
 </head>
 <body>
+  <script>
+    window.location.href = "{{ request.url }}?id={{ notizia.id }}"; 
+  </script>
 </body>
 </html>
