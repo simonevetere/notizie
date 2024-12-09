@@ -4,16 +4,34 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ notizia.titolo }}</title>
+
   <meta property="og:title" content="{{ notizia.titolo }}" />
-  <meta property="og:image" content="{{ notizia.immagine }}" />
-  <meta property="og:url" content="{{ request.url }}" />
-  <meta property="og:description" content="{{ notizia.contenuto[:150] }}..." /> 
+  <meta property="og:description" content="{{ notizia.contenuto[:150] }}..." />
   <meta property="og:type" content="article" />
-  <meta property="og:site_name" content="Nome del tuo sito" /> 
+  <meta property="og:url" content="{{ request.url }}" />
+  <meta property="og:image" content="{{ notizia.immagine }}" />
+  <meta property="og:image:secure_url" content="{{ notizia.immagine }}" /> 
+  <meta property="og:image:width" content="1200" /> 
+  <meta property="og:image:height" content="630" /> 
+  <meta property="og:site_name" content="Terribile.SPACE" />
+  <meta property="og:locale" content="it_IT" /> 
+  <meta property="article:author" content="Terribile.SPACE" /> 
+  <meta property="article:publisher" content="https://www.facebook.com/terribile.space" /> 
+  <meta property="article:published_time" content="2024-12-09T12:00:00+01:00" /> 
+  <meta property="article:modified_time" content="2024-12-09T13:00:00+01:00" /> 
+  <meta property="article:section" content="MEME" /> 
+
+  <meta name="twitter:card" content="summary_large_image" /> 
+  <meta name="twitter:site" content="@terribile.space" /> 
+  <meta name="twitter:title" content="{{ notizia.titolo }}" />
+  <meta name="twitter:description" content="{{ notizia.contenuto[:150] }}..." />
+  <meta name="twitter:image" content="{{ notizia.immagine }}" />
+  <meta name="twitter:creator" content="@terribile.space" /> 
+
 </head>
 <body>
   <script>
-    window.location.href = "{{ request.url }}?id={{ notizia.id }}"; 
+    window.location.href = "https://meme.terribile.space?id={{ notizia.id }}"; 
   </script>
 </body>
 </html>

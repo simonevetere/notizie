@@ -1,5 +1,6 @@
 import os
 import shutil
+import json
 from flask import Flask, request, jsonify, render_template
 from tinydb import TinyDB, Query
 from flask_cors import CORS
@@ -111,28 +112,28 @@ def eliminare_notizia(id):
 @app.route('/preview')
 def get_preview():
     """
-    Restituisce l'HTML dinamico per una singola notizia, 
-    leggendo le informazioni dall'URL e includendo i meta tag per la preview.
+    Restituisce una singola notizia in base all'ID.
     """
-
-    id_documento = request.args.get('id')
-
+    id = request.args.get('id')
+    backup_database()
     try:
-        # Ottieni la notizia direttamente con l'ID
-        notizia = db.get(doc_id=int(id_documento))
-    except (ValueError, TypeError, DocumentNotFoundError) as e:
-        # Gestisci gli errori di tipo e di documento non trovato
-        print(f"Errore durante la ricerca della notizia: {e}")
-        return "Errore: Notizia non trovata", 404
+        # Tenta di convertire l'ID in un intero
+        id = int(id)
+        notizia = db.get(doc_id=id)
+    except ValueError:
+        n = Query()
+        # Se la conversione fallisce, cerca con id=
+        notizia = db.search(n.id.matches(id))
     except Exception as e:
-        print(f"Errore imprevisto: {e}")
         return handle_error(e)
 
-    # Validazione dei dati (aggiungi controlli per immagine, video e redirect)
-    if not notizia.titolo or not notizia.redirect:
-        return "Errore: titolo e redirect sono obbligatori", 400
+    print(notizia)
 
-    return render_template('preview.html', notizia=notizia)
+    if notizia:
+        notizia = notizia[0]
+        return render_template('preview.html', notizia=notizia)
+    else:
+        return jsonify({'messaggio': 'Notizia non trovata'}), 404
 
 backup_database()
 
