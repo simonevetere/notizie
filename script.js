@@ -1,8 +1,3 @@
-function ordinaNotizie(listaNotizie) {
-  // Ordina le notizie per doc_id in ordine crescente
-  return listaNotizie.sort((a, b) => a.doc_id - b.doc_id);
-}
-
 function creaAnteprimaNotizia(notizia) {
   const article = document.createElement('article');
   let content = `
@@ -101,12 +96,10 @@ function caricaNotizie() {
         if (categorieValide.includes(category)) {
           const notizieFiltrate = notizie.filter(n => n.categoria === category);
 
-          const notizieOrdinate = ordinaNotizie(notizieFiltrate); 
-
           const main = document.querySelector('main');
-          notizieOrdinate.forEach(notizia => {
+          notizieFiltrate.forEach(notizia => {
             const anteprima = creaAnteprimaNotizia(notizia);
-            main.appendChild(anteprima);
+            main.insertBefore(anteprima, main.firstChild);
           });
         } else {
           // Handle invalid category (e.g., display an error message)
