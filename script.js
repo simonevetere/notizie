@@ -1,6 +1,6 @@
 function ordinaNotizie(listaNotizie) {
-  // Ordina le notizie per doc_id in ordine decrescente
-  return listaNotizie.sort((a, b) => b.doc_id - a.doc_id);
+  // Ordina le notizie per doc_id in ordine crescente
+  return listaNotizie.sort((a, b) => a.doc_id - b.doc_id);
 }
 
 function creaAnteprimaNotizia(notizia) {
