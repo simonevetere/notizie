@@ -1,3 +1,8 @@
+function ordinaNotizie(listaNotizie) {
+  // Ordina le notizie per doc_id in ordine decrescente
+  return listaNotizie.sort((a, b) => b.doc_id - a.doc_id);
+}
+
 function creaAnteprimaNotizia(notizia) {
   const article = document.createElement('article');
   let content = `
@@ -95,8 +100,11 @@ function caricaNotizie() {
         const categorieValide = ['random', 'geopolitics', 'niggameme', 'chiggameme', 'italy'];
         if (categorieValide.includes(category)) {
           const notizieFiltrate = notizie.filter(n => n.categoria === category);
+
+          const notizieOrdinate = ordinaNotizie(notizieFiltrate); 
+
           const main = document.querySelector('main');
-          notizieFiltrate.forEach(notizia => {
+          notizieOrdinate.forEach(notizia => {
             const anteprima = creaAnteprimaNotizia(notizia);
             main.appendChild(anteprima);
           });
